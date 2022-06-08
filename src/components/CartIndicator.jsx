@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button'
 import { FaShoppingCart } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Form } from 'react-bootstrap'
 import { useState } from 'react'
 import { setUsernameAction } from '../redux/actions'
@@ -10,29 +10,35 @@ import { setUsernameAction } from '../redux/actions'
 // mapStateToProps is a function: it will return an OBJECT
 // it is called mapStateToProps because every PROPERTY in this object
 // will become a PROP for CartIndicator
-const mapStateToProps = (state) => {
-  return {
-    cartLength: state.cart.content.length,
-    username: state.user.firstName,
-  }
-}
+// const mapStateToProps = (state) => {
+//   return {
+//     cartLength: state.cart.content.length,
+//     username: state.user.firstName,
+//   }
+// }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setUsername: (newName) => {
-      dispatch(setUsernameAction(newName))
-    },
-  }
-}
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     setUsername: (newName) => {
+//       dispatch(setUsernameAction(newName))
+//     },
+//   }
+// }
 
-const CartIndicator = ({ cartLength, username, setUsername }) => {
+const CartIndicator = () => {
   const navigate = useNavigate()
   const [inputValue, setInputValue] = useState('')
+
+  const cartLength = useSelector((state) => state.cart.content.length)
+  const username = useSelector((state) => state.user.firstName)
+
+  const dispatch = useDispatch()
 
   const handleSubmit = (e) => {
     e.preventDefault()
     // now I want to dispatch an action for setting the username
-    setUsername(inputValue)
+    // setUsername(inputValue)
+    dispatch(setUsernameAction(inputValue))
   }
 
   return (
@@ -56,7 +62,7 @@ const CartIndicator = ({ cartLength, username, setUsername }) => {
   )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CartIndicator)
+export default CartIndicator
 // connect works just like withRouter
 // withRouter was creating a HOC -> higher order component
 

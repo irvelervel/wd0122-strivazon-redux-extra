@@ -2,31 +2,26 @@ import { useState, useEffect } from 'react'
 import BookList from './BookList'
 import BookDetail from './BookDetail'
 import { Alert, Col, Row, Spinner } from 'react-bootstrap'
-import { connect } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { getBooksAction } from '../redux/actions'
 
-const mapStateToProps = (state) => {
-  return {
-    booksFromReduxStore: state.book.stock, // <-- the array of books from the redux store
-    errorFetchingBooks: state.book.error,
-    areBooksLoading: state.book.loading,
-  }
-}
+// const mapStateToProps = (state) => {
+//   return {
+//     booksFromReduxStore: state.book.stock, // <-- the array of books from the redux store
+//     errorFetchingBooks: state.book.error,
+//     areBooksLoading: state.book.loading,
+//   }
+// }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getBooks: () => {
-      dispatch(getBooksAction())
-    },
-  }
-}
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     getBooks: () => {
+//       dispatch(getBooksAction())
+//     },
+//   }
+// }
 
-const BookStore = ({
-  getBooks,
-  booksFromReduxStore,
-  errorFetchingBooks,
-  areBooksLoading,
-}) => {
+const BookStore = () => {
   // state = {
   //   // books: [], // <-- this was a local state holding the books, I don't need it anymore...
   //   bookSelected: null,
@@ -34,8 +29,14 @@ const BookStore = ({
 
   const [bookSelected, setBookSelected] = useState(null)
 
+  const booksFromReduxStore = useSelector((state) => state.book.stock)
+  const errorFetchingBooks = useSelector((state) => state.book.error)
+  const areBooksLoading = useSelector((state) => state.book.loading)
+
+  const dispatch = useDispatch()
+
   useEffect(() => {
-    getBooks()
+    dispatch(getBooksAction())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -62,4 +63,4 @@ const BookStore = ({
   )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BookStore)
+export default BookStore
